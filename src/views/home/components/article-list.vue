@@ -1,5 +1,5 @@
 <template>
-  <div class="article-list">
+  <div class="article-list" ref="article-list">
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
         <ArticleItem v-for="(item, index) in articles" :key="index" :article="item"></ArticleItem>
@@ -11,6 +11,7 @@
 <script>
 import { getArticle } from '@/api/article.js'
 import ArticleItem from '@/components/article-item.vue'
+import { debounce } from 'lodash'
 export default {
   name: 'ArticleList',
   data() {
@@ -19,7 +20,8 @@ export default {
       loading: false,
       finished: false,
       timestamp: null,
-      isLoading: false
+      isLoading: false,
+      scrollTop: 0
     }
   },
   props: {
@@ -58,6 +60,14 @@ export default {
   },
   components: {
     ArticleItem
+  },
+  mounted() {
+    this.$refs['article-list'].onscroll = debounce(() => {
+      this.scrollTop = this.$refs['article-list'].scrollTop
+    }, 50)
+  },
+  activated() {
+    this.$refs['article-list'].scrollTop = this.scrollTop
   }
 }
 </script>

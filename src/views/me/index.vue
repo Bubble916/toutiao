@@ -4,7 +4,7 @@
       <van-cell class="base" center :border="false">
         <van-image class="avater" slot="icon" round fit="cover" :src="currentUser.photo" />
         <div class="nick" slot="title">{{ currentUser.name }}</div>
-        <van-button class="btn-update" size="small" round>编辑资料</van-button>
+        <van-button class="btn-update" size="small" round to="/user/profile">编辑资料</van-button>
       </van-cell>
       <van-grid :border="false">
         <van-grid-item class="data-item">
@@ -34,7 +34,16 @@
       </van-grid>
     </van-cell-group>
     <div class="nologin" v-else>
-      <div @click="$router.push('/login')">
+      <div
+        @click="
+          $router.push({
+            name: 'login',
+            query: {
+              redirect: '/me'
+            }
+          })
+        "
+      >
         <van-image class="bigavater" slot="icon" round fit="cover" src="https://img01.yzcdn.cn/vant/cat.jpeg" />
       </div>
       <div class="text">登录</div>
@@ -44,7 +53,6 @@
       <van-grid-item class="nav-grid" icon="browsing-history-o" text="历史" />
     </van-grid>
     <van-cell title="通知" is-link to="/" />
-    <van-cell title="小智同学" is-link to="/" />
     <div class="out" v-if="user">
       <van-button type="danger" block round @click="logout">退出登录</van-button>
     </div>
